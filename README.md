@@ -73,14 +73,9 @@ Quando um usuário acessa um site, o navegador (cliente) envia uma requisição 
 
 Simulei a busca das vagas como se viessem de um servidor real: `buscarVagasDoServidor()` usa uma `Promise` com atraso artificial (`setTimeout`), e `main()` usa `async/await` para esperar essa resposta antes de continuar — do mesmo jeito que aconteceria com uma API de verdade.
 
-## Vídeo de apresentação
-
-[link do vídeo aqui]
-
 ## Kanban de apresentação (Trello)
 https://trello.com/invite/b/6a95bc02f2ff8c8850dddc50/ATTI5ff790b37d8525690572591e509eb77c345C3D4F/skillmatch-js-simulador-de-compatibilidade-com-vaga-front-end-junior
 
-## Apresentação no GitHub
 
 
 
