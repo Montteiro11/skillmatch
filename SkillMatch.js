@@ -137,3 +137,85 @@ const vagasDeEmprego = vagasBrutas.map(
       vaga.diferencial,
     ),
 );
+
+
+/* Aqui eu classifico o percentual de compatibilidade utilizando if e
+   else. A partir de 80% é alta compatibilidade, entre 50 e 79% é
+   média e abaixo de 50% é baixa. */
+
+function classificarCompatibilidade(percentual) {
+  if (percentual >= 80) {
+    return "Alta compatibilidade";
+  } else if (percentual >= 50) {
+    return "Média compatibilidade";
+  } else {
+    return "Baixa compatibilidade";
+  }
+}
+
+/* Essa função verifica quais requisitos da vaga o eu ainda não
+   possuo. Aqui eu uso novamente o filter, mas dessa vez para encontrar
+   os requisitos que não estão na minha lista de habilidades. */
+
+function listarHabilidadesFaltantes(vaga, habilidadesCandidato) {
+  return vaga.requisitos.filter(
+    (requisito) => !habilidadesCandidato.includes(requisito),
+  );
+}
+
+/* Aqui eu criei uma função que recebe um array de vagas e também uma
+   outra função como parâmetro. Essa outra função é o callback, que
+   define o que será feito com cada vaga. */
+
+function processarVagas(vagas, callback) {
+  return vagas.map(callback);
+}
+
+/* Aqui eu utilizei um closure para criar um contador. A quantidade
+   analisada fica guardada dentro da função e continua sendo atualizada
+   cada vez que o contador é chamado */
+
+function criarContadorDeAnalises() {
+  let quantidadeAnalisada = 0;
+  return function () {
+    quantidadeAnalisada++;
+    return quantidadeAnalisada;
+  };
+}
+const contarAnalise = criarContadorDeAnalises();
+
+/* Aqui eu utilizo o reduce para comparar os resultados das vagas e
+   encontrar aquela que combina mais comigo no momento. */
+
+function encontrarMelhorVaga(resultados) {
+  return resultados.reduce((melhorAteAgora, atual) =>
+    atual.compatibilidade > melhorAteAgora.compatibilidade
+      ? atual
+      : melhorAteAgora,
+  );
+}
+
+/* Aqui eu conto quais habilidades aparecem como faltantes nas vagas
+   e recomendo aquela que aparece com maior frequência, porque assim
+   ela pode ser útil para mais de uma vaga. */
+
+function gerarRecomendacaoEstudo(resultados) {
+  const todasFaltantes = resultados.flatMap((resultado) => resultado.faltantes);
+
+  if (todasFaltantes.length === 0) {
+    return "Parabéns! Você já atende a todos os requisitos das vagas analisadas.";
+  }
+
+  const contagem = {};
+  todasFaltantes.forEach((habilidade) => {
+    contagem[habilidade] = (contagem[habilidade] || 0) + 1;
+  });
+
+  const habilidadePrioritaria = Object.keys(contagem).reduce(
+    (maisFrequente, atual) =>
+      contagem[atual] > contagem[maisFrequente] ? atual : maisFrequente,
+  );
+
+  return `Recomendação: estude "${habilidadePrioritaria}" — é a habilidade que mais aparece faltando entre as vagas analisadas.`;
+}
+
