@@ -66,7 +66,8 @@ Quando um usuário acessa um site, o navegador (cliente) envia uma requisição 
 ## Extensões usadas no VS Code
 
 - Node.js — utilizado para executar o código JavaScript diretamente no terminal, sem depender do navegador
-- Prettier — para formatar o código automaticamente
+- Prettier — para formatar o código.
+- Dracula Theme Offical - ''colore'' o codigo para melhor visualização.
 
 ## Arquitetura cliente-servidor
 

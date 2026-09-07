@@ -209,7 +209,7 @@ async function main() {
     // Uso do while pra exibir o cabeçalho do relatório
     let cabecalhoExibido = false;
     do {
-      console.log("=== Relatório de Compatibilidade SkillMatch JS ===");
+      console.log("Relatório de Compatibilidade SkillMatch JS");
       console.log(
         `Candidata: ${candidato.nomeCompleto} (${candidato.areaDeInteresse})\n`,
       );
@@ -267,5 +267,5 @@ async function main() {
     );
   }
 }
-
+ 
 main();
