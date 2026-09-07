@@ -219,3 +219,15 @@ function gerarRecomendacaoEstudo(resultados) {
   return `Recomendação: estude "${habilidadePrioritaria}" — é a habilidade que mais aparece faltando entre as vagas analisadas.`;
 }
 
+
+/* Aqui eu simulei o carregamento das vagas como se elas viessem de um
+   servidor. Utilizei um Promise e um atraso de um segundo para
+   simular o tempo de uma requisição. */
+
+function buscarVagasDoServidor() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(vagasDeEmprego);
+    }, 1000);
+  });
+}
