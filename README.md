@@ -76,6 +76,10 @@ Simulei a busca das vagas como se viessem de um servidor real: `buscarVagasDoSer
 ## Kanban de apresentação (Trello)
 https://trello.com/invite/b/6a95bc02f2ff8c8850dddc50/ATTI5ff790b37d8525690572591e509eb77c345C3D4F/skillmatch-js-simulador-de-compatibilidade-com-vaga-front-end-junior
 
+## Vídeo de apresentação (Loom)
+https://www.loom.com/share/88dde730be3243dcafed7be1a95098b5
+
+
 
 
 
