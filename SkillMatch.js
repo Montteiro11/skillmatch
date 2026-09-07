@@ -231,3 +231,127 @@ function buscarVagasDoServidor() {
     }, 1000);
   });
 }
+
+
+/* Aqui começa a função principal do sistema. Eu uso async e await
+   para esperar as vagas serem carregadas antes de continuar a análise.
+   Coloquei um try/catch em volta de tudo, porque, se a busca simulada
+   no servidor falhar por algum motivo, eu quero tratar esse erro em
+   vez de deixar o programa quebrar sem explicação. */
+
+async function main() {
+  try {
+    console.log("Buscando vagas no servidor simulado...\n");
+    const vagas = await buscarVagasDoServidor();
+
+    /* Callback sendo utilizado: aqui é onde eu realmente uso o callback
+       que criei anteriormente. Para cada vaga, eu conto a análise,
+       calculo a compatibilidade, classifico o resultado, encontro as
+       habilidades faltantes e verifico os diferenciais que eu possuo. */
+
+    const resultados = processarVagas(vagas, (vaga) => {
+      contarAnalise();
+      vaga.exibirResumo();
+      const compatibilidade = vaga.calcularCompatibilidade(
+        candidato.listaDeHabilidades,
+      );
+      return {
+        empresa: vaga.empresa,
+        cargo: vaga.cargo,
+        compatibilidade: Math.round(compatibilidade),
+        classificacao: classificarCompatibilidade(compatibilidade),
+        faltantes: listarHabilidadesFaltantes(vaga, candidato.listaDeHabilidades),
+        diferenciaisQueTem: vaga.verificarDiferenciais(
+          candidato.listaDeHabilidades,
+        ),
+      };
+    });
+
+    /* Eu uso um do-while para exibir o cabeçalho do meu relatório antes
+       de mostrar qualquer resultado. Como é um do-while, esse bloco
+       roda pelo menos uma vez, mesmo que a condição de controle já
+       comece como falsa. */
+
+    let cabecalhoExibido = false;
+    do {
+      console.log("=== Relatório de Compatibilidade SkillMatch JS ===");
+      console.log(
+        `Candidata: ${candidato.nomeCompleto} (${candidato.areaDeInteresse})\n`,
+      );
+      cabecalhoExibido = true;
+    } while (!cabecalhoExibido);
+
+    /* Mostrando os resultados: aqui eu percorro os resultados e mostro
+       no console as informações de cada vaga: a empresa, o percentual
+       de compatibilidade, a classificação, as habilidades faltantes e
+       os diferenciais que eu já possuo. */
+
+    resultados.forEach((resultado) => {
+      console.log(
+        `Compatibilidade: ${resultado.compatibilidade}% (${resultado.classificacao})`,
+      );
+      console.log(
+        `Habilidades faltantes: ${resultado.faltantes.length > 0 ? resultado.faltantes.join(", ") : "nenhuma"}`,
+      );
+      console.log(
+        `Diferenciais que já possui: ${resultado.diferenciaisQueTem.length > 0 ? resultado.diferenciaisQueTem.join(", ") : "nenhum"}`,
+      );
+      console.log("---");
+    });
+
+    /* Laço de repetição (for): aqui eu percorro o array de resultados
+       na mão, usando um índice, para exibir um ranking numerado das
+       vagas na mesma ordem em que aparecem no array. */
+
+    console.log("\nRanking das vagas analisadas:");
+    for (let i = 0; i < resultados.length; i++) {
+      console.log(`${i + 1}º - ${resultados[i].empresa}: ${resultados[i].compatibilidade}%`);
+    }
+
+    /* Laço de repetição (while): aqui eu percorro os resultados
+       enquanto ainda houver itens para verificar, contando quantas
+       vagas tiveram alta compatibilidade comigo. */
+
+    let indice = 0;
+    let totalAltaCompatibilidade = 0;
+    while (indice < resultados.length) {
+      if (resultados[indice].classificacao === "Alta compatibilidade") {
+        totalAltaCompatibilidade++;
+      }
+      indice++;
+    }
+    console.log(`\nQuantidade de vagas com alta compatibilidade: ${totalAltaCompatibilidade}`);
+
+    /* Melhor vaga + recomendação + contador: por fim, eu mostro qual foi
+       a vaga com maior compatibilidade, apresento a recomendação de
+       estudo e mostro a quantidade de vagas analisadas pelo contador
+       criado com closure. */
+
+    const melhorVaga = encontrarMelhorVaga(resultados);
+    console.log(
+      `\nVaga com maior compatibilidade: ${melhorVaga.empresa} (${melhorVaga.compatibilidade}%)`,
+    );
+
+    console.log(gerarRecomendacaoEstudo(resultados));
+
+    console.log(
+      `\nTotal de vagas analisadas (contador via closure): ${contarAnalise() - 1}`,
+    );
+  } catch (erro) {
+    console.log("Ocorreu um erro ao buscar ou processar as vagas do servidor:", erro.message);
+  }
+}
+
+/*Aqui eu chamo a função main, que inicia todo o processo. */
+
+main();
+
+/* ============================================================
+   ROTEIRO DE FECHAMENTO (fala final do vídeo, fora do código)
+
+   Depois de rodar o código e mostrar o resultado no console, ainda
+   preciso falar sobre:
+   - Como organizei as tarefas no Kanban antes de começar (mostrar o quadro)
+   - Quais branches criei no GitHub e o que cada uma entregou (mostrar o repositório)
+   - O que acho que poderia melhorar no meu código
+   ============================================================ */
