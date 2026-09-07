@@ -75,3 +75,65 @@ const vagasBrutas = [
     diferencial: ["React", "Animações CSS"],
   },
 ];
+
+/* Aqui eu criei a classe Vaga para representar as vagas do sistema.
+   No constructor eu recebo as informações de cada vaga e utilizo o
+   this para guardar essas informações. */
+class Vaga {
+  constructor(empresa, cargo, requisitos, diferencial) {
+    this.empresa = empresa;
+    this.cargo = cargo;
+    this.requisitos = requisitos;
+    this.diferencial = diferencial;
+  }
+
+  /* Aqui eu criei o método que calcula a compatibilidade. Ele compara
+     as minhas habilidades com os requisitos da vaga. O filter
+     encontra os requisitos que o candidato possui e depois calcula
+     o percentual com base nessa quantidade. */
+
+  calcularCompatibilidade(habilidadesCandidato) {
+    const requisitosQueTem = this.requisitos.filter((requisito) =>
+      habilidadesCandidato.includes(requisito),
+    );
+    return (requisitosQueTem.length / this.requisitos.length) * 100;
+  }
+
+  /* Aqui eu criei um método que exibe um resumo da vaga (empresa e
+     cargo), usando this para pegar os dados da própria vaga. */
+
+  exibirResumo() {
+    console.log(`Empresa: ${this.empresa} - ${this.cargo}`);
+  }
+}
+
+/* Aqui eu utilizei herança. A classe VagaComDiferencial herda da 
+classe Vaga, mas acrescenta um comportamento, que verifica quais diferenciais o eu já possuo. */
+
+class VagaComDiferencial extends Vaga {
+  constructor(empresa, cargo, requisitos, diferencial) {
+    super(empresa, cargo, requisitos, diferencial);
+  }
+
+  /* método extra que só essa subclasse tem: verifica quantos "diferenciais" o candidato também possui*/
+
+  verificarDiferenciais(habilidadesCandidato) {
+    return this.diferencial.filter((item) =>
+      habilidadesCandidato.includes(item),
+    );
+  }
+}
+
+/* Aqui eu uso o map para transformar cada vaga que estava no array
+   inicial em uma instância da classe VagaComDiferencial. Assim, essas
+   vagas passam a ter os métodos que criei na classe. */
+
+const vagasDeEmprego = vagasBrutas.map(
+  (vaga) =>
+    new VagaComDiferencial(
+      vaga.empresa,
+      vaga.cargo,
+      vaga.requisitos,
+      vaga.diferencial,
+    ),
+);
