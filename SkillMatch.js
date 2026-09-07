@@ -1,19 +1,4 @@
-/* ============================================================
-   ROTEIRO DE ABERTURA (fala inicial do vídeo)
-
-   "Meu projeto é o SkillMatch JS, um simulador que compara minhas
-   habilidades com os requisitos de vagas de front-end júnior, calcula
-   um percentual de compatibilidade, mostra o que ainda me falta e
-   recomenda o que estudar. Para desenvolver, eu não me baseei só no
-   curso: pesquisei em vídeos no YouTube, em sites e usei IA como
-   apoio para tirar dúvidas e organizar o código, sempre revisando e
-   entendendo cada parte antes de aplicar. Vou apresentar o código
-   por blocos, explicando o que cada parte faz."
-   ============================================================ */
-
-/*  Aqui eu criei o objeto candidato, que reúne as informações que serão
-   utilizadas na análise. Coloquei meu nome, minha área de interesse,
-   minhas habilidades e meu tempo de experiência. */
+// Meu perfil de candidata
 const candidato = {
   nomeCompleto: "Vanessa Monteiro Paim",
   areaDeInteresse: "Front End Júnior",
@@ -28,8 +13,7 @@ const candidato = {
   tempoDeExperiencia: "6 meses",
 };
 
-/* Aqui eu criei um array com três vagas fictícias. Cada vaga possui
-   a empresa, o cargo, os requisitos necessários e alguns diferenciais. */
+// As 3 vagas fictícias.
 const vagasBrutas = [
   {
     empresa: "ByteForge",
@@ -76,9 +60,7 @@ const vagasBrutas = [
   },
 ];
 
-/* Aqui eu criei a classe Vaga para representar as vagas do sistema.
-   No constructor eu recebo as informações de cada vaga e utilizo o
-   this para guardar essas informações. */
+// Criei a classe pra representar uma vaga, usando o this
 class Vaga {
   constructor(empresa, cargo, requisitos, diferencial) {
     this.empresa = empresa;
@@ -87,11 +69,7 @@ class Vaga {
     this.diferencial = diferencial;
   }
 
-  /* Aqui eu criei o método que calcula a compatibilidade. Ele compara
-     as minhas habilidades com os requisitos da vaga. O filter
-     encontra os requisitos que o candidato possui e depois calcula
-     o percentual com base nessa quantidade. */
-
+  // Aqui eu calculo minha compatibilidade com essa vaga
   calcularCompatibilidade(habilidadesCandidato) {
     const requisitosQueTem = this.requisitos.filter((requisito) =>
       habilidadesCandidato.includes(requisito),
@@ -99,23 +77,16 @@ class Vaga {
     return (requisitosQueTem.length / this.requisitos.length) * 100;
   }
 
-  /* Aqui eu criei um método que exibe um resumo da vaga (empresa e
-     cargo), usando this para pegar os dados da própria vaga. */
-
   exibirResumo() {
     console.log(`Empresa: ${this.empresa} - ${this.cargo}`);
   }
 }
 
-/* Aqui eu utilizei herança. A classe VagaComDiferencial herda da 
-classe Vaga, mas acrescenta um comportamento, que verifica quais diferenciais o eu já possuo. */
-
+// Uso herança aqui: essa classe estende a classe Vaga e verifica meus diferenciais
 class VagaComDiferencial extends Vaga {
   constructor(empresa, cargo, requisitos, diferencial) {
     super(empresa, cargo, requisitos, diferencial);
   }
-
-  /* método extra que só essa subclasse tem: verifica quantos "diferenciais" o candidato também possui*/
 
   verificarDiferenciais(habilidadesCandidato) {
     return this.diferencial.filter((item) =>
@@ -124,10 +95,7 @@ class VagaComDiferencial extends Vaga {
   }
 }
 
-/* Aqui eu uso o map para transformar cada vaga que estava no array
-   inicial em uma instância da classe VagaComDiferencial. Assim, essas
-   vagas passam a ter os métodos que criei na classe. */
-
+// Transformo as vagas em instância dessa classe
 const vagasDeEmprego = vagasBrutas.map(
   (vaga) =>
     new VagaComDiferencial(
@@ -138,11 +106,7 @@ const vagasDeEmprego = vagasBrutas.map(
     ),
 );
 
-
-/* Aqui eu classifico o percentual de compatibilidade utilizando if e
-   else. A partir de 80% é alta compatibilidade, entre 50 e 79% é
-   média e abaixo de 50% é baixa. */
-
+// Classifico a compatibilidade entre Alta, Média ou Baixa
 function classificarCompatibilidade(percentual) {
   if (percentual >= 80) {
     return "Alta compatibilidade";
@@ -153,28 +117,19 @@ function classificarCompatibilidade(percentual) {
   }
 }
 
-/* Essa função verifica quais requisitos da vaga o eu ainda não
-   possuo. Aqui eu uso novamente o filter, mas dessa vez para encontrar
-   os requisitos que não estão na minha lista de habilidades. */
-
+// Listo as habilidades que ainda me faltam.
 function listarHabilidadesFaltantes(vaga, habilidadesCandidato) {
   return vaga.requisitos.filter(
     (requisito) => !habilidadesCandidato.includes(requisito),
   );
 }
 
-/* Aqui eu criei uma função que recebe um array de vagas e também uma
-   outra função como parâmetro. Essa outra função é o callback, que
-   define o que será feito com cada vaga. */
-
+// Essa função recebe um callback, que uso mais adiante
 function processarVagas(vagas, callback) {
   return vagas.map(callback);
 }
 
-/* Aqui eu utilizei um closure para criar um contador. A quantidade
-   analisada fica guardada dentro da função e continua sendo atualizada
-   cada vez que o contador é chamado */
-
+// Crio um contador usando closure
 function criarContadorDeAnalises() {
   let quantidadeAnalisada = 0;
   return function () {
@@ -184,9 +139,7 @@ function criarContadorDeAnalises() {
 }
 const contarAnalise = criarContadorDeAnalises();
 
-/* Aqui eu utilizo o reduce para comparar os resultados das vagas e
-   encontrar aquela que combina mais comigo no momento. */
-
+// Encontro a vaga que combina mais de comigo
 function encontrarMelhorVaga(resultados) {
   return resultados.reduce((melhorAteAgora, atual) =>
     atual.compatibilidade > melhorAteAgora.compatibilidade
@@ -195,10 +148,7 @@ function encontrarMelhorVaga(resultados) {
   );
 }
 
-/* Aqui eu conto quais habilidades aparecem como faltantes nas vagas
-   e recomendo aquela que aparece com maior frequência, porque assim
-   ela pode ser útil para mais de uma vaga. */
-
+// Gero minha recomendação de estudo
 function gerarRecomendacaoEstudo(resultados) {
   const todasFaltantes = resultados.flatMap((resultado) => resultado.faltantes);
 
@@ -219,11 +169,7 @@ function gerarRecomendacaoEstudo(resultados) {
   return `Recomendação: estude "${habilidadePrioritaria}" — é a habilidade que mais aparece faltando entre as vagas analisadas.`;
 }
 
-
-/* Aqui eu simulei o carregamento das vagas como se elas viessem de um
-   servidor. Utilizei um Promise e um atraso de um segundo para
-   simular o tempo de uma requisição. */
-
+// Simulo a busca das vagas como se viessem de um servidor
 function buscarVagasDoServidor() {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -232,23 +178,13 @@ function buscarVagasDoServidor() {
   });
 }
 
-
-/* Aqui começa a função principal do sistema. Eu uso async e await
-   para esperar as vagas serem carregadas antes de continuar a análise.
-   Coloquei um try/catch em volta de tudo, porque, se a busca simulada
-   no servidor falhar por algum motivo, eu quero tratar esse erro em
-   vez de deixar o programa quebrar sem explicação. */
-
+// Função principal: uso async/await e trato erro com try/catch
 async function main() {
   try {
     console.log("Buscando vagas no servidor simulado...\n");
     const vagas = await buscarVagasDoServidor();
 
-    /* Callback sendo utilizado: aqui é onde eu realmente uso o callback
-       que criei anteriormente. Para cada vaga, eu conto a análise,
-       calculo a compatibilidade, classifico o resultado, encontro as
-       habilidades faltantes e verifico os diferenciais que eu possuo. */
-
+    // Aqui uso o callback pra processar cada vaga
     const resultados = processarVagas(vagas, (vaga) => {
       contarAnalise();
       vaga.exibirResumo();
@@ -260,18 +196,17 @@ async function main() {
         cargo: vaga.cargo,
         compatibilidade: Math.round(compatibilidade),
         classificacao: classificarCompatibilidade(compatibilidade),
-        faltantes: listarHabilidadesFaltantes(vaga, candidato.listaDeHabilidades),
+        faltantes: listarHabilidadesFaltantes(
+          vaga,
+          candidato.listaDeHabilidades,
+        ),
         diferenciaisQueTem: vaga.verificarDiferenciais(
           candidato.listaDeHabilidades,
         ),
       };
     });
 
-    /* Eu uso um do-while para exibir o cabeçalho do meu relatório antes
-       de mostrar qualquer resultado. Como é um do-while, esse bloco
-       roda pelo menos uma vez, mesmo que a condição de controle já
-       comece como falsa. */
-
+    // Uso do while pra exibir o cabeçalho do relatório
     let cabecalhoExibido = false;
     do {
       console.log("=== Relatório de Compatibilidade SkillMatch JS ===");
@@ -280,11 +215,6 @@ async function main() {
       );
       cabecalhoExibido = true;
     } while (!cabecalhoExibido);
-
-    /* Mostrando os resultados: aqui eu percorro os resultados e mostro
-       no console as informações de cada vaga: a empresa, o percentual
-       de compatibilidade, a classificação, as habilidades faltantes e
-       os diferenciais que eu já possuo. */
 
     resultados.forEach((resultado) => {
       console.log(
@@ -299,19 +229,15 @@ async function main() {
       console.log("---");
     });
 
-    /* Laço de repetição (for): aqui eu percorro o array de resultados
-       na mão, usando um índice, para exibir um ranking numerado das
-       vagas na mesma ordem em que aparecem no array. */
-
+    // Uso for pra montar um ranking numerado
     console.log("\nRanking das vagas analisadas:");
     for (let i = 0; i < resultados.length; i++) {
-      console.log(`${i + 1}º - ${resultados[i].empresa}: ${resultados[i].compatibilidade}%`);
+      console.log(
+        `${i + 1}º - ${resultados[i].empresa}: ${resultados[i].compatibilidade}%`,
+      );
     }
 
-    /* Laço de repetição (while): aqui eu percorro os resultados
-       enquanto ainda houver itens para verificar, contando quantas
-       vagas tiveram alta compatibilidade comigo. */
-
+    // Uso while pra contar quantas vagas tiveram alta compatibilidade
     let indice = 0;
     let totalAltaCompatibilidade = 0;
     while (indice < resultados.length) {
@@ -320,12 +246,9 @@ async function main() {
       }
       indice++;
     }
-    console.log(`\nQuantidade de vagas com alta compatibilidade: ${totalAltaCompatibilidade}`);
-
-    /* Melhor vaga + recomendação + contador: por fim, eu mostro qual foi
-       a vaga com maior compatibilidade, apresento a recomendação de
-       estudo e mostro a quantidade de vagas analisadas pelo contador
-       criado com closure. */
+    console.log(
+      `\nQuantidade de vagas com alta compatibilidade: ${totalAltaCompatibilidade}`,
+    );
 
     const melhorVaga = encontrarMelhorVaga(resultados);
     console.log(
@@ -338,20 +261,11 @@ async function main() {
       `\nTotal de vagas analisadas (contador via closure): ${contarAnalise() - 1}`,
     );
   } catch (erro) {
-    console.log("Ocorreu um erro ao buscar ou processar as vagas do servidor:", erro.message);
+    console.log(
+      "Ocorreu um erro ao buscar ou processar as vagas do servidor:",
+      erro.message,
+    );
   }
 }
 
-/*Aqui eu chamo a função main, que inicia todo o processo. */
-
 main();
-
-/* ============================================================
-   ROTEIRO DE FECHAMENTO (fala final do vídeo, fora do código)
-
-   Depois de rodar o código e mostrar o resultado no console, ainda
-   preciso falar sobre:
-   - Como organizei as tarefas no Kanban antes de começar (mostrar o quadro)
-   - Quais branches criei no GitHub e o que cada uma entregou (mostrar o repositório)
-   - O que acho que poderia melhorar no meu código
-   ============================================================ */
